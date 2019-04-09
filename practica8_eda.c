@@ -10,20 +10,24 @@ struct nodo{
 
 };
 
+//DECLARACION DE FUNCIONES
 int Insertar(struct nodo **HEAD, int dato);
 void ImprimirLista(struct nodo *HEAD);
 void Borrar(struct nodo **HEAD);
 void Buscar(struct nodo **HEAD);
 
+//FUNCION PRINCIPAL
 int main (void){
   int loopMenu = 1,op,valores,n,m;
   system("clear");
   system("cls");
   printf("---- PROYECTO DE LISTA DOBLE  -----");
+  //DECLARAMOS EL PRIMER ELEMENTO (HEAD)
   struct nodo *HEAD = NULL;
   printf("\nPOR EL MOMENTO SOLO ES POSIBLE INSERTAR ELEMENTOS:\n");
   printf("\nINGRESE EL VALOR DE SU PRIMER ELEMENTO --> ");
   scanf("%d",&n);
+  //SE GENERA Y SE APUNTAN A NULO, PORQUE ESTÁ SOLITO :(
   HEAD = (struct nodo*)malloc(sizeof(struct nodo));
   HEAD->NEXT = NULL;
   HEAD->PREV = NULL;
@@ -46,10 +50,14 @@ int main (void){
         system("cls");
         printf("\nINGRESA EL VALOR DEL ELEMENTO:  ");
         scanf("%d",&valores);
+        //LA VARIABLE m SIRVE PARA VERIFICAR QUE SÍ SE HAYA CREADO EL NODO
+        //EN CASO CONTRARIO, LO REPITE HASTA QUE LA FUNCION NOS REGRESE 1
+        //ENTONCES ESTARÁ VERIFICADO QUE SE CREÓ CORRECTAMENTE
         m = Insertar(&HEAD,valores);
         while(m == 0){
           Insertar(&HEAD,valores);
         }
+        //EL HEAD AHORA ES EL NUEVO ELEMENTO, POR TANTO SE RECORRE
         HEAD = HEAD->PREV;
         ImprimirLista(HEAD);
       break;
@@ -64,6 +72,8 @@ int main (void){
   return 0;
 }
 
+//SI SOLO QUEREMOS OBTENER DATOS, ES APUNTADOR SIMPLE
+//SI QUEREMOS MODIFICAR LA VARIABLE, ES APUNTADOR DOBLE
 int Insertar(struct nodo **HEAD,int dato){
 
   struct nodo *nuevo = NULL;
@@ -98,5 +108,5 @@ void Buscar(struct nodo **HEAD){
 
 void Borrar(struct nodo **HEAD){
 
-  
+
 }
