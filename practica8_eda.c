@@ -2,11 +2,9 @@
 #include<stdlib.h>
 #include<time.h>
 
-int i;
-
 struct nodo{
 
-  int valor; //HAY QUE CAMBIAR ESTO, DEBERIA SER CONTENIDO(CARACTERES), NO UN ENTERO
+  int valor; //HAY QUE CAMBIAR ESTO, DEBERIA SER CONTENIDO(CARACTERES), NO ENTERO
   struct nodo *NEXT;
   struct nodo *PREV;
 
@@ -14,6 +12,8 @@ struct nodo{
 
 int Insertar(struct nodo **HEAD, int dato);
 void ImprimirLista(struct nodo *HEAD);
+void Borrar(struct nodo **HEAD);
+void Buscar(struct nodo **HEAD);
 
 int main (void){
   int loopMenu = 1,op,valores,n,m;
@@ -24,7 +24,10 @@ int main (void){
   printf("\nPOR EL MOMENTO SOLO ES POSIBLE INSERTAR ELEMENTOS:\n");
   printf("\nINGRESE EL VALOR DE SU PRIMER ELEMENTO --> ");
   scanf("%d",&n);
-  Insertar(&HEAD,n);
+  HEAD = (struct nodo*)malloc(sizeof(struct nodo));
+  HEAD->NEXT = NULL;
+  HEAD->PREV = NULL;
+  HEAD->valor = n;
   ImprimirLista(HEAD);
   while(loopMenu == 1){
     printf("\n\nELIGE UNA OPERACION:\n");
@@ -39,19 +42,22 @@ int main (void){
     }
     switch (op){
       case 1:
+        system("clear");
+        system("cls");
         printf("\nINGRESA EL VALOR DEL ELEMENTO:  ");
         scanf("%d",&valores);
         m = Insertar(&HEAD,valores);
         while(m == 0){
           Insertar(&HEAD,valores);
         }
+        HEAD = HEAD->PREV;
         ImprimirLista(HEAD);
       break;
       case 2:
-        printf("\n");
+        Buscar(&HEAD);
       break;
       case 3:
-
+        Borrar(&HEAD);
       break;
     }
   }
@@ -79,7 +85,7 @@ void ImprimirLista(struct nodo *HEAD){
   struct nodo *auxiliar = HEAD;
 
   while (auxiliar != NULL) {
-    printf("\n\t%d\n",auxiliar->valor);
+    printf("\n\t|| %d ||",auxiliar->valor);
     auxiliar = auxiliar->NEXT;
   }
 
