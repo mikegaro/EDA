@@ -90,3 +90,13 @@ void ImprimirLista(struct nodo *HEAD){
   }
 
 }
+
+void Buscar(struct nodo **HEAD){
+
+
+}
+
+void Borrar(struct nodo **HEAD){
+
+  
+}
