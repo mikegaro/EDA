@@ -12,20 +12,19 @@ struct nodo{
 
 };
 
-struct nodo *InsertarNodo(int x);
 int Insertar(struct nodo **HEAD, int dato);
 void ImprimirLista(struct nodo *HEAD);
 
-
-
 int main (void){
-  int loopMenu = 1,op,valores,verificador;
+  int loopMenu = 1,op,valores,n,m;
   system("clear");
   system("cls");
   printf("---- PROYECTO DE LISTA DOBLE  -----");
   struct nodo *HEAD = NULL;
-  verificador = Insertar(&HEAD,55);
-  printf("%d",verificador);
+  printf("\nPOR EL MOMENTO SOLO ES POSIBLE INSERTAR ELEMENTOS:\n");
+  printf("\nINGRESE EL VALOR DE SU PRIMER ELEMENTO --> ");
+  scanf("%d",&n);
+  Insertar(&HEAD,n);
   ImprimirLista(HEAD);
   while(loopMenu == 1){
     printf("\n\nELIGE UNA OPERACION:\n");
@@ -40,9 +39,13 @@ int main (void){
     }
     switch (op){
       case 1:
-        printf("\nINGRESA EL VALOR:  ");
+        printf("\nINGRESA EL VALOR DEL ELEMENTO:  ");
         scanf("%d",&valores);
-        InsertarNodo(valores);
+        m = Insertar(&HEAD,valores);
+        while(m == 0){
+          Insertar(&HEAD,valores);
+        }
+        ImprimirLista(HEAD);
       break;
       case 2:
         printf("\n");
@@ -55,22 +58,12 @@ int main (void){
   return 0;
 }
 
-
-
-struct nodo *InsertarNodo(int x){
-  struct nodo *nuevo = NULL;
-  nuevo = (struct nodo*)malloc(sizeof(struct nodo));
-  if (nuevo != NULL){
-    nuevo->valor = x;
-  }
-  return nuevo;
-}
-
 int Insertar(struct nodo **HEAD,int dato){
 
   struct nodo *nuevo = NULL;
-  nuevo = InsertarNodo(dato);
+  nuevo = (struct nodo*)malloc(sizeof(struct nodo));
   if (nuevo != NULL){
+    nuevo->valor = dato;
     nuevo->NEXT = *HEAD;
     nuevo->PREV = NULL;
     if( *HEAD != NULL){
@@ -82,10 +75,12 @@ int Insertar(struct nodo **HEAD,int dato){
 }
 
 void ImprimirLista(struct nodo *HEAD){
+  printf("\nIMPRIMIENDO...");
   struct nodo *auxiliar = HEAD;
 
   while (auxiliar != NULL) {
-    printf("\n%d\n", auxiliar->valor);
+    printf("\n\t%d\n",auxiliar->valor);
     auxiliar = auxiliar->NEXT;
   }
+
 }
