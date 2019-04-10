@@ -7,7 +7,7 @@ struct nodo{
   int valor; //HAY QUE CAMBIAR ESTO, DEBERIA SER CONTENIDO(CARACTERES), NO ENTERO
   struct nodo *NEXT;
   struct nodo *PREV;
-
+  char *contenido;
 };
 
 //DECLARACION DE FUNCIONES
