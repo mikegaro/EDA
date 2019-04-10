@@ -62,10 +62,14 @@ int main (void){
         ImprimirLista(HEAD);
       break;
       case 2:
+        system("clear");
+        system("cls");
         Buscar(HEAD);
         ImprimirLista(HEAD);
       break;
       case 3:
+        system("clear");
+        system("cls");
         Borrar(&HEAD);
         ImprimirLista(HEAD);
       break;
