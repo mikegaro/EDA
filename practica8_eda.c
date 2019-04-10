@@ -14,7 +14,7 @@ struct nodo{
 int Insertar(struct nodo **HEAD, int dato);
 void ImprimirLista(struct nodo *HEAD);
 void Borrar(struct nodo **HEAD);
-void Buscar(struct nodo **HEAD);
+void Buscar(struct nodo *HEAD);
 
 //FUNCION PRINCIPAL
 int main (void){
@@ -62,11 +62,21 @@ int main (void){
         ImprimirLista(HEAD);
       break;
       case 2:
-        Buscar(&HEAD);
+        Buscar(HEAD);
+        ImprimirLista(HEAD);
       break;
       case 3:
         Borrar(&HEAD);
+        ImprimirLista(HEAD);
       break;
+    }
+    printf("\n\nPara continuar, presione 1.");
+    printf("\nDe lo contrario, presione 0.");
+    printf("\n-->  ");
+    scanf("%d",&loopMenu);
+    while(loopMenu < 0 || loopMenu > 0){
+        printf("Opcion no valida. Intenta de nuevo--> ");
+        scanf("%d",&loopMenu);
     }
   }
   return 0;
@@ -101,12 +111,57 @@ void ImprimirLista(struct nodo *HEAD){
 
 }
 
-void Buscar(struct nodo **HEAD){
-
-
+void Buscar(struct nodo *HEAD){
+    struct nodo *auxiliar = HEAD;
+    int verificador,buscado;
+    printf("\nINGRESA EL VALOR QUE ESTAS BUSCANDO -->  ");
+    scanf("%d",&buscado);
+    while(auxiliar != NULL){
+        if(auxiliar->valor == buscado){
+            verificador++;
+        }
+        else{
+            auxiliar = auxiliar->NEXT;
+        }
+    }
+    if(verificador == 0){
+        printf("\nEL VALOR BUSCADO NO SE ENCUENTRA EN EL ARREGLO");
+    }
+    else{
+        printf("\nEL VALOR %d SI SE ENCUENTRA EN EL ARREGLO.",buscado);
+    }
 }
 
 void Borrar(struct nodo **HEAD){
+    struct nodo *auxiliar = *HEAD;
+    int verificador,buscado;
+    printf("\nINGRESA EL VALOR QUE ESTAS BUSCANDO -->  ");
+    scanf("%d",&buscado);
+    while(auxiliar != NULL && verificador == 0){
+        if(auxiliar->valor == buscado){
+            verificador++;
+            if(auxiliar->PREV == NULL){
+                auxiliar->NEXT->PREV = NULL;
+                *HEAD = auxiliar->NEXT;
+            }
+            else if(auxiliar->NEXT == NULL){
+                auxiliar->PREV->NEXT = NULL;
+            }
 
-
+            else{
+                auxiliar->PREV->NEXT = auxiliar->NEXT;
+                auxiliar->NEXT->PREV = auxiliar->PREV;
+            }
+            free(auxiliar);
+        }
+        else{
+            auxiliar = auxiliar->NEXT;
+        }
+    }
+    if (verificador == 0){
+        printf("\nNO SE ENCONTRO ELEMENTO.");
+    }
+    else{
+        printf("\nElemento Eliminado--> %d",buscado);
+    }
 }
