@@ -78,7 +78,7 @@ int main (void){
     printf("\nDe lo contrario, presione 0.");
     printf("\n-->  ");
     scanf("%d",&loopMenu);
-    while(loopMenu < 0 || loopMenu > 0){
+    while(loopMenu < 0 || loopMenu > 1){
         printf("Opcion no valida. Intenta de nuevo--> ");
         scanf("%d",&loopMenu);
     }
