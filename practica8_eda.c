@@ -18,21 +18,12 @@ void Buscar(struct nodo *HEAD);
 
 //FUNCION PRINCIPAL
 int main (void){
-  int loopMenu = 1,op,valores,n,m;
+  int loopMenu = 1,op,valores,m;
   system("clear");
   system("cls");
   printf("---- PROYECTO DE LISTA DOBLE  -----");
-  //DECLARAMOS EL PRIMER ELEMENTO (HEAD)
+  //DECLARAMOS EL HEAD
   struct nodo *HEAD = NULL;
-  printf("\nPOR EL MOMENTO SOLO ES POSIBLE INSERTAR ELEMENTOS:\n");
-  printf("\nINGRESE EL VALOR DE SU PRIMER ELEMENTO --> ");
-  scanf("%d",&n);
-  //SE GENERA Y SE APUNTAN A NULO, PORQUE ESTÁ SOLITO :(
-  HEAD = (struct nodo*)malloc(sizeof(struct nodo));
-  HEAD->NEXT = NULL;
-  HEAD->PREV = NULL;
-  HEAD->valor = n;
-  ImprimirLista(HEAD);
   while(loopMenu == 1){
     printf("\n\nELIGE UNA OPERACION:\n");
     printf("\t1.-INSERTAR ELEMENTO.");
@@ -58,8 +49,13 @@ int main (void){
           Insertar(&HEAD,valores);
         }
         //EL HEAD AHORA ES EL NUEVO ELEMENTO, POR TANTO SE RECORRE
-        HEAD = HEAD->PREV;
-        ImprimirLista(HEAD);
+        if(HEAD->PREV == NULL && HEAD->NEXT == NULL){
+          ImprimirLista(HEAD);
+        }
+        else{
+          HEAD = HEAD->PREV;
+          ImprimirLista(HEAD);
+        }
       break;
       case 2:
         system("clear");
@@ -92,80 +88,115 @@ int Insertar(struct nodo **HEAD,int dato){
 
   struct nodo *nuevo = NULL;
   nuevo = (struct nodo*)malloc(sizeof(struct nodo));
-  if (nuevo != NULL){
-    nuevo->valor = dato;
-    nuevo->NEXT = *HEAD;
-    nuevo->PREV = NULL;
-    if( *HEAD != NULL){
-      (*HEAD)->PREV = nuevo;
+  if(*HEAD == NULL){
+    if (nuevo != NULL){
+      *HEAD = nuevo;
+      nuevo->valor = dato;
+      nuevo->NEXT = NULL;
+      nuevo->PREV = NULL;
+      return 1;
     }
-    return 1;
+    return 0;
   }
-  return 0;
+  else{
+    if (nuevo != NULL){
+      nuevo->valor = dato;
+      nuevo->NEXT = *HEAD;
+      nuevo->PREV = NULL;
+      if( *HEAD != NULL){
+        (*HEAD)->PREV = nuevo;
+      }
+      return 1;
+    }
+    return 0;
+  }
 }
 
 void ImprimirLista(struct nodo *HEAD){
   printf("\nIMPRIMIENDO...");
   struct nodo *auxiliar = HEAD;
-
-  while (auxiliar != NULL) {
-    printf("\n\t|| %d ||",auxiliar->valor);
-    auxiliar = auxiliar->NEXT;
+  if(HEAD == NULL){
+    printf("\n || LISTA VACIA ||");
   }
-
+  else{
+    while (auxiliar != NULL) {
+      printf("\n\t|| %d ||",auxiliar->valor);
+      auxiliar = auxiliar->NEXT;
+    }
+  }
 }
 
 void Buscar(struct nodo *HEAD){
     struct nodo *auxiliar = HEAD;
-    int verificador,buscado;
-    printf("\nINGRESA EL VALOR QUE ESTAS BUSCANDO -->  ");
-    scanf("%d",&buscado);
-    while(auxiliar != NULL){
-        if(auxiliar->valor == buscado){
-            verificador++;
-        }
-        else{
-            auxiliar = auxiliar->NEXT;
-        }
-    }
-    if(verificador == 0){
-        printf("\nEL VALOR BUSCADO NO SE ENCUENTRA EN EL ARREGLO");
+    int verificador = 0,buscado;
+    if(auxiliar == NULL){
+      printf("\n\nNO HAY ELEMENTOS EN LA LISTA. NO ES POSIBLE BUSCAR");
     }
     else{
-        printf("\nEL VALOR %d SI SE ENCUENTRA EN EL ARREGLO.",buscado);
+      printf("\nINGRESA EL VALOR QUE ESTAS BUSCANDO -->  ");
+      scanf("%d",&buscado);
+      while(auxiliar != NULL && verificador == 0){
+          if(auxiliar->valor == buscado){
+              verificador++;
+          }
+          else{
+              auxiliar = auxiliar->NEXT;
+          }
+      }
+      if(verificador == 0){
+          printf("\nEL VALOR BUSCADO NO SE ENCUENTRA EN EL ARREGLO");
+      }
+      else{
+          printf("\nEL VALOR %d SI SE ENCUENTRA EN EL ARREGLO.",buscado);
+      }
     }
 }
 
 void Borrar(struct nodo **HEAD){
     struct nodo *auxiliar = *HEAD;
-    int verificador,buscado;
-    printf("\nINGRESA EL VALOR QUE ESTAS BUSCANDO -->  ");
-    scanf("%d",&buscado);
-    while(auxiliar != NULL && verificador == 0){
-        if(auxiliar->valor == buscado){
-            verificador++;
-            if(auxiliar->PREV == NULL){
-                auxiliar->NEXT->PREV = NULL;
-                *HEAD = auxiliar->NEXT;
-            }
-            else if(auxiliar->NEXT == NULL){
-                auxiliar->PREV->NEXT = NULL;
-            }
-
-            else{
-                auxiliar->PREV->NEXT = auxiliar->NEXT;
-                auxiliar->NEXT->PREV = auxiliar->PREV;
-            }
-            free(auxiliar);
-        }
-        else{
-            auxiliar = auxiliar->NEXT;
-        }
-    }
-    if (verificador == 0){
-        printf("\nNO SE ENCONTRO ELEMENTO.");
+    int verificador = 0,buscado;
+    if(auxiliar == NULL){
+      printf("\nNO HAY ELEMENTOS EN LA LISTA. NO ES POSIBLE BORRAR.");
     }
     else{
-        printf("\nElemento Eliminado--> %d",buscado);
+      printf("\nINGRESA EL VALOR QUE DESEAS BORRAR -->  ");
+      scanf("%d",&buscado);
+      if(auxiliar->NEXT == NULL && auxiliar->PREV == NULL){
+        if(auxiliar->valor == buscado){
+          verificador++;
+          free(auxiliar);
+          *HEAD = NULL;
+        }
+      }
+      else{
+        while(auxiliar != NULL && verificador == 0){
+            if(auxiliar->valor == buscado){
+              verificador++;
+              if(auxiliar->PREV == NULL){
+                  auxiliar->NEXT->PREV = NULL;
+                  *HEAD = auxiliar->NEXT;
+                  free(auxiliar);
+              }
+              else if(auxiliar->NEXT == NULL){
+                  auxiliar->PREV->NEXT = NULL;
+                  free(auxiliar);
+              }
+              else{
+                  auxiliar->PREV->NEXT = auxiliar->NEXT;
+                  auxiliar->NEXT->PREV = auxiliar->PREV;
+                  free(auxiliar);
+              }
+            }
+            else{
+                auxiliar = auxiliar->NEXT;
+            }
+        }
+      }
+      if (verificador == 0){
+          printf("\nNO SE ENCONTRO ELEMENTO.");
+      }
+      else{
+          printf("\nElemento Eliminado--> %d",buscado);
+      }
     }
 }
