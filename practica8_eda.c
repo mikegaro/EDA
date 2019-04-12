@@ -7,7 +7,7 @@ struct nodo{
   int valor; //HAY QUE CAMBIAR ESTO, DEBERIA SER CONTENIDO(CARACTERES), NO ENTERO
   struct nodo *NEXT;
   struct nodo *PREV;
-  char *contenido;
+  char contenido[20];
 };
 
 //DECLARACION DE FUNCIONES
@@ -15,13 +15,14 @@ int Insertar(struct nodo **HEAD, int dato);
 void ImprimirLista(struct nodo *HEAD);
 void Borrar(struct nodo **HEAD);
 void Buscar(struct nodo *HEAD);
+void LeerContenido(struct nodo *elemento);
 
 //FUNCION PRINCIPAL
 int main (void){
   int loopMenu = 1,op,valores,m;
   system("clear");
   system("cls");
-  printf("---- PROYECTO DE LISTA DOBLE  -----");
+  printf("---- PROYECTO DE LISTA DOBLE || PELICULAS -----");
   //DECLARAMOS EL HEAD
   struct nodo *HEAD = NULL;
   while(loopMenu == 1){
@@ -94,6 +95,7 @@ int Insertar(struct nodo **HEAD,int dato){
       nuevo->valor = dato;
       nuevo->NEXT = NULL;
       nuevo->PREV = NULL;
+      LeerContenido(nuevo);
       return 1;
     }
     return 0;
@@ -106,6 +108,7 @@ int Insertar(struct nodo **HEAD,int dato){
       if( *HEAD != NULL){
         (*HEAD)->PREV = nuevo;
       }
+      LeerContenido(nuevo);
       return 1;
     }
     return 0;
@@ -120,7 +123,8 @@ void ImprimirLista(struct nodo *HEAD){
   }
   else{
     while (auxiliar != NULL) {
-      printf("\n\t|| %d ||",auxiliar->valor);
+      printf("\n\t|| %s ||",auxiliar->contenido);
+      printf("<-- %d",auxiliar->valor);
       auxiliar = auxiliar->NEXT;
     }
   }
@@ -199,4 +203,11 @@ void Borrar(struct nodo **HEAD){
           printf("\nElemento Eliminado--> %d",buscado);
       }
     }
+}
+
+void LeerContenido(struct nodo *elemento){
+  printf("\nIngresa el nombre de la pelicula:  ");
+  //scanf("%s",elemento->contenido);
+  scanf("%[^'\n']s",elemento->contenido);
+
 }
