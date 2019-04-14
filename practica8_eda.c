@@ -1,17 +1,18 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
+#include<string.h>
 
 struct nodo{
 
-  int valor; //HAY QUE CAMBIAR ESTO, DEBERIA SER CONTENIDO(CARACTERES), NO ENTERO
+  time_t valor;
   struct nodo *NEXT;
   struct nodo *PREV;
   char contenido[20];
 };
 
 //DECLARACION DE FUNCIONES
-int Insertar(struct nodo **HEAD, int dato);
+int Insertar(struct nodo **HEAD);
 void ImprimirLista(struct nodo *HEAD);
 void Borrar(struct nodo **HEAD);
 void Buscar(struct nodo *HEAD);
@@ -40,14 +41,12 @@ int main (void){
       case 1:
         system("clear");
         system("cls");
-        printf("\nINGRESA EL VALOR DEL ELEMENTO:  ");
-        scanf("%d",&valores);
         //LA VARIABLE m SIRVE PARA VERIFICAR QUE SÍ SE HAYA CREADO EL NODO
         //EN CASO CONTRARIO, LO REPITE HASTA QUE LA FUNCION NOS REGRESE 1
         //ENTONCES ESTARÁ VERIFICADO QUE SE CREÓ CORRECTAMENTE
-        m = Insertar(&HEAD,valores);
+        m = Insertar(&HEAD);
         while(m == 0){
-          Insertar(&HEAD,valores);
+          Insertar(&HEAD);
         }
         //EL HEAD AHORA ES EL NUEVO ELEMENTO, POR TANTO SE RECORRE
         if(HEAD->PREV == NULL && HEAD->NEXT == NULL){
@@ -85,14 +84,14 @@ int main (void){
 
 //SI SOLO QUEREMOS OBTENER DATOS, ES APUNTADOR SIMPLE
 //SI QUEREMOS MODIFICAR LA VARIABLE, ES APUNTADOR DOBLE
-int Insertar(struct nodo **HEAD,int dato){
+int Insertar(struct nodo **HEAD){
 
   struct nodo *nuevo = NULL;
   nuevo = (struct nodo*)malloc(sizeof(struct nodo));
   if(*HEAD == NULL){
     if (nuevo != NULL){
       *HEAD = nuevo;
-      nuevo->valor = dato;
+      time(&(nuevo->valor));
       nuevo->NEXT = NULL;
       nuevo->PREV = NULL;
       LeerContenido(nuevo);
@@ -102,7 +101,7 @@ int Insertar(struct nodo **HEAD,int dato){
   }
   else{
     if (nuevo != NULL){
-      nuevo->valor = dato;
+      time(&(nuevo->valor));
       nuevo->NEXT = *HEAD;
       nuevo->PREV = NULL;
       if( *HEAD != NULL){
@@ -124,7 +123,7 @@ void ImprimirLista(struct nodo *HEAD){
   else{
     while (auxiliar != NULL) {
       printf("\n\t|| %s ||",auxiliar->contenido);
-      printf("<-- %d",auxiliar->valor);
+      printf("<-- Fecha de Publicacion %s",ctime(&(auxiliar->valor)));
       auxiliar = auxiliar->NEXT;
     }
   }
@@ -132,15 +131,16 @@ void ImprimirLista(struct nodo *HEAD){
 
 void Buscar(struct nodo *HEAD){
     struct nodo *auxiliar = HEAD;
-    int verificador = 0,buscado;
+    int verificador = 0;
+    char buscado[20];
     if(auxiliar == NULL){
       printf("\n\nNO HAY ELEMENTOS EN LA LISTA. NO ES POSIBLE BUSCAR");
     }
     else{
-      printf("\nINGRESA EL VALOR QUE ESTAS BUSCANDO -->  ");
-      scanf("%d",&buscado);
+      printf("\nINGRESA LA PELICULA QUE ESTAS BUSCANDO -->  ");
+      scanf("%s",buscado);
       while(auxiliar != NULL && verificador == 0){
-          if(auxiliar->valor == buscado){
+          if(strcmp(auxiliar->contenido,buscado) == 0){
               verificador++;
           }
           else{
@@ -148,25 +148,26 @@ void Buscar(struct nodo *HEAD){
           }
       }
       if(verificador == 0){
-          printf("\nEL VALOR BUSCADO NO SE ENCUENTRA EN EL ARREGLO");
+          printf("\nLA PELICULA BUSCADA NO SE ENCUENTRA EN EL ARREGLO");
       }
       else{
-          printf("\nEL VALOR %d SI SE ENCUENTRA EN EL ARREGLO.",buscado);
+          printf("\nLA PELICULA '%s' SI SE ENCUENTRA EN EL ARREGLO.",buscado);
       }
     }
 }
 
 void Borrar(struct nodo **HEAD){
     struct nodo *auxiliar = *HEAD;
-    int verificador = 0,buscado;
+    int verificador = 0;
+    char buscado[20];
     if(auxiliar == NULL){
       printf("\nNO HAY ELEMENTOS EN LA LISTA. NO ES POSIBLE BORRAR.");
     }
     else{
-      printf("\nINGRESA EL VALOR QUE DESEAS BORRAR -->  ");
-      scanf("%d",&buscado);
+      printf("\nINGRESA LA PELICULA QUE DESEAS BORRAR -->  ");
+      scanf("%s",buscado);
       if(auxiliar->NEXT == NULL && auxiliar->PREV == NULL){
-        if(auxiliar->valor == buscado){
+        if(strcmp(auxiliar->contenido,buscado) == 0){
           verificador++;
           free(auxiliar);
           *HEAD = NULL;
@@ -174,7 +175,7 @@ void Borrar(struct nodo **HEAD){
       }
       else{
         while(auxiliar != NULL && verificador == 0){
-            if(auxiliar->valor == buscado){
+            if(strcmp(auxiliar->contenido,buscado) == 0){
               verificador++;
               if(auxiliar->PREV == NULL){
                   auxiliar->NEXT->PREV = NULL;
@@ -200,14 +201,13 @@ void Borrar(struct nodo **HEAD){
           printf("\nNO SE ENCONTRO ELEMENTO.");
       }
       else{
-          printf("\nElemento Eliminado--> %d",buscado);
+          printf("\nElemento Eliminado--> '%s' ",buscado);
       }
     }
 }
 
 void LeerContenido(struct nodo *elemento){
   printf("\nIngresa el nombre de la pelicula:  ");
-  //scanf("%s",elemento->contenido);
-  scanf("%[^'\n']s",elemento->contenido);
+  scanf("%s",elemento->contenido);
 
 }
