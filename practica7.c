@@ -55,7 +55,6 @@ int main ()
     		insertar(&head, frase);
     		imprimirLista(&head);
     		getchar();
-    		system("cls"); // ESTE SE TIENE QUE BORRAR !!!
 
           break;
 
@@ -67,7 +66,6 @@ int main ()
     		if(buscando != NULL)
         	printf("\nEncontrado %d: %s\n", key, buscando->contenido);
    			getchar();
-   			system("cls");
 
           break;
 
@@ -78,7 +76,6 @@ int main ()
           	printf("\nBORRANDO %d...\n", borrar(&head, EAB) );
     		imprimirLista(&head);
     		getchar();
-    		system("cls");
           break;
         }
 
