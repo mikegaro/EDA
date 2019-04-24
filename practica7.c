@@ -55,7 +55,7 @@ int main ()
     		insertar(&head, frase);
     		imprimirLista(&head);
     		getchar();
-    		system("cls");
+    	//	system("cls");
 
           break;
 
